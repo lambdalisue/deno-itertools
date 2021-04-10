@@ -20,12 +20,12 @@ export function* chunked<T>(
   size: number,
 ): Iterable<Array<T>> {
   const it = iter(iterable);
-  let r1 = it.next();
-  if (r1.done) {
+  const r = it.next();
+  if (r.done) {
     return;
   }
 
-  let chunk = [r1.value];
+  let chunk = [r.value];
 
   for (const item of it) {
     chunk.push(item);
@@ -52,8 +52,8 @@ export function* chunked<T>(
 export function* flatten<T>(
   iterableOfIterables: Iterable<Iterable<T>>,
 ): Iterable<T> {
-  for (let iterable of iterableOfIterables) {
-    for (let item of iterable) {
+  for (const iterable of iterableOfIterables) {
+    for (const item of iterable) {
       yield item;
     }
   }
@@ -83,7 +83,7 @@ export function* itake<T>(n: number, iterable: Iterable<T>): Iterable<T> {
   const it = iter(iterable);
   let count = n;
   while (count-- > 0) {
-    let s = it.next();
+    const s = it.next();
     if (!s.done) {
       yield s.value;
     } else {
@@ -104,7 +104,7 @@ export function* itake<T>(n: number, iterable: Iterable<T>): Iterable<T> {
  */
 export function* pairwise<T>(iterable: Iterable<T>): Iterable<[T, T]> {
   const it = iter(iterable);
-  let r = it.next();
+  const r = it.next();
   if (r.done) {
     return;
   }
@@ -134,10 +134,10 @@ export function partition<T>(
   iterable: Iterable<T>,
   predicate: Predicate<T>,
 ): [Array<T>, Array<T>] {
-  let good = [];
-  let bad = [];
+  const good = [];
+  const bad = [];
 
-  for (let item of iterable) {
+  for (const item of iterable) {
     if (predicate(item)) {
       good.push(item);
     } else {
@@ -160,7 +160,7 @@ export function* roundrobin<T>(...iters: Array<Iterable<T>>): Iterable<T> {
   // slowly going to exhaust.  Once an iterable is exhausted, it will be
   // removed from this list.  Once the entire list is empty, this algorithm
   // ends.
-  let iterables: Array<Iterator<T>> = map(iters, iter);
+  const iterables: Array<Iterator<T>> = map(iters, iter);
 
   while (iterables.length > 0) {
     let index = 0;
@@ -197,7 +197,7 @@ export function* heads<T>(...iters: Array<Iterable<T>>): Iterable<Array<T>> {
   // slowly going to exhaust.  Once an iterable is exhausted, it will be
   // removed from this list.  Once the entire list is empty, this algorithm
   // ends.
-  let iterables: Array<Iterator<T>> = map(iters, iter);
+  const iterables: Array<Iterator<T>> = map(iters, iter);
 
   while (iterables.length > 0) {
     let index = 0;
@@ -242,9 +242,9 @@ export function* uniqueEverseen<T>(
   iterable: Iterable<T>,
   keyFn: (v: T) => Primitive = primitiveIdentity,
 ): Iterable<T> {
-  let seen = new Set();
-  for (let item of iterable) {
-    let key = keyFn(item);
+  const seen = new Set();
+  for (const item of iterable) {
+    const key = keyFn(item);
     if (!seen.has(key)) {
       seen.add(key);
       yield item;
@@ -266,8 +266,8 @@ export function* uniqueJustseen<T>(
   keyFn: (v: T) => Primitive = primitiveIdentity,
 ): Iterable<T> {
   let last = undefined;
-  for (let item of iterable) {
-    let key = keyFn(item);
+  for (const item of iterable) {
+    const key = keyFn(item);
     if (key !== last) {
       yield item;
       last = key;

@@ -18,7 +18,8 @@ function slicePredicate(
   step: number,
 ) {
   // If stop is not provided (= undefined), then interpret the start value as the stop value
-  let _start = start, _stop = stop, _step = step;
+  let _start = start, _stop = stop;
+  const _step = step;
   if (_stop === undefined) {
     [_start, _stop] = [0, _start];
   }
@@ -52,7 +53,7 @@ export function chain<T>(...iterables: Array<Iterable<T>>): Iterable<T> {
  * (default 0), incrementing by `step`.  To decrement, use a negative step
  * number.
  */
-export function* count(start: number = 0, step: number = 1): Iterable<number> {
+export function* count(start = 0, step = 1): Iterable<number> {
   let n = start;
   for (;;) {
     yield n;
@@ -161,7 +162,7 @@ export function* icompress<T>(
   data: Iterable<T>,
   selectors: Iterable<boolean>,
 ): Iterable<T> {
-  for (let [d, s] of izip(data, selectors)) {
+  for (const [d, s] of izip(data, selectors)) {
     if (s) {
       yield d;
     }
@@ -176,7 +177,7 @@ export function* ifilter<T>(
   iterable: Iterable<T>,
   predicate: Predicate<T>,
 ): Iterable<T> {
-  for (let value of iterable) {
+  for (const value of iterable) {
     if (predicate(value)) {
       yield value;
     }
@@ -191,7 +192,7 @@ export function* imap<T, V>(
   iterable: Iterable<T>,
   mapper: (v: T) => V,
 ): Iterable<V> {
-  for (let value of iterable) {
+  for (const value of iterable) {
     yield mapper(value);
   }
 }
@@ -209,7 +210,7 @@ export function* islice<T>(
   iterable: Iterable<T>,
   start: number,
   stop: number | null | undefined = undefined,
-  step: number = 1,
+  step = 1,
 ): Iterable<T> {
   /* istanbul ignore if */
   if (start < 0) throw new Error("start cannot be negative");
@@ -297,9 +298,10 @@ export function* izipLongest2<T1, T2, D>(
       // All iterables exhausted
       return;
     } else {
-      // deno-lint-ignore no-explicit-any
       yield [
+        // deno-lint-ignore no-explicit-any
         !x.done ? x.value : filler as any,
+        // deno-lint-ignore no-explicit-any
         !y.done ? y.value : filler as any,
       ];
     }
@@ -326,10 +328,12 @@ export function* izipLongest3<T1, T2, T3, D>(
       // All iterables exhausted
       return;
     } else {
-      // deno-lint-ignore no-explicit-any
       yield [
+        // deno-lint-ignore no-explicit-any
         !x.done ? x.value : filler as any,
+        // deno-lint-ignore no-explicit-any
         !y.done ? y.value : filler as any,
+        // deno-lint-ignore no-explicit-any
         !z.done ? z.value : filler as any,
       ];
     }
@@ -353,6 +357,7 @@ export function* izipMany<T>(...iters: Array<Iterable<T>>): Iterable<Array<T>> {
       xs.next()
     );
     if (all(heads, (h) => !h.done)) {
+      // deno-lint-ignore no-explicit-any
       yield heads.map((h) => ((h.value as any) as T));
     } else {
       // One of the iterables exhausted
@@ -378,23 +383,23 @@ export function* permutations<T>(
   iterable: Iterable<T>,
   r: Maybe<number>,
 ): Iterable<Array<T>> {
-  let pool = Array.from(iterable);
-  let n = pool.length;
-  let x = r === undefined ? n : r;
+  const pool = Array.from(iterable);
+  const n = pool.length;
+  const x = r === undefined ? n : r;
 
   if (x > n) {
     return;
   }
 
   let indices: Array<number> = Array.from(range(n));
-  let cycles: Array<number> = Array.from(range(n, n - x, -1));
-  let poolgetter = (i: number) => pool[i];
+  const cycles: Array<number> = Array.from(range(n, n - x, -1));
+  const poolgetter = (i: number) => pool[i];
 
   yield indices.slice(0, x).map(poolgetter);
 
   while (n > 0) {
-    let cleanExit: boolean = true;
-    for (let i of range(x - 1, -1, -1)) {
+    let cleanExit = true;
+    for (const i of range(x - 1, -1, -1)) {
       cycles[i] -= 1;
       if (cycles[i] === 0) {
         indices = indices
@@ -403,9 +408,9 @@ export function* permutations<T>(
           .concat(indices.slice(i, i + 1));
         cycles[i] = n - i;
       } else {
-        let j: number = cycles[i];
+        const j: number = cycles[i];
 
-        let [p, q] = [indices[indices.length - j], indices[i]];
+        const [p, q] = [indices[indices.length - j], indices[i]];
         indices[i] = p;
         indices[indices.length - j] = q;
         yield indices.slice(0, x).map(poolgetter);

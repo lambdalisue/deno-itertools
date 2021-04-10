@@ -15,7 +15,7 @@ function isDefined<T>(x: T): boolean {
  *     [1, 2, 3]
  */
 export function* icompact<T>(iterable: Iterable<Maybe<T>>): Iterable<T> {
-  for (let item of iterable) {
+  for (const item of iterable) {
     if (typeof item !== "undefined") {
       yield item;
     }
@@ -36,10 +36,11 @@ export function compact<T>(iterable: Iterable<Maybe<T>>): Array<T> {
  *     { a: 1, c: 0 }
  *
  */
-export function compactObject<O extends object>(
+export function compactObject<O extends Record<string, unknown>>(
   obj: O,
 ): Omit<O, NullableKeys<O>> {
-  let result: any = {};
+  // deno-lint-ignore no-explicit-any
+  const result: any = {};
   for (const [key, value] of Object.entries(obj)) {
     if (typeof value !== "undefined") {
       result[key] = value;
@@ -58,7 +59,7 @@ export function first<T>(
   keyFn?: Predicate<T>,
 ): Maybe<T> {
   const fn = keyFn || isDefined;
-  for (let value of iterable) {
+  for (const value of iterable) {
     if (fn(value)) {
       return value;
     }

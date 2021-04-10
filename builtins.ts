@@ -97,7 +97,7 @@ export function contains<T>(haystack: Iterable<T>, needle: T): boolean {
  */
 export function* enumerate<T>(
   iterable: Iterable<T>,
-  start: number = 0,
+  start = 0,
 ): Iterable<[number, T]> {
   let index: number = start;
   for (const value of iterable) {
@@ -296,7 +296,7 @@ export function reduce_<T>(
 export function sorted<T>(
   iterable: Iterable<T>,
   keyFn: (v: T) => Primitive = primitiveIdentity,
-  reverse: boolean = false,
+  reverse = false,
 ): Array<T> {
   const result = Array.from(iterable);
   result.sort(keyToCmp(keyFn)); // sort in-place

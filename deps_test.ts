@@ -1,6 +1,6 @@
 export { expect } from "https://deno.land/x/expect@v0.2.6/mod.ts";
 
-let currentScopes: string[] = [];
+const currentScopes: string[] = [];
 
 export function describe(name: string, fn: () => void): void {
   currentScopes.push(name);

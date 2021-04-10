@@ -4,8 +4,8 @@ type CmpFn<T> = (a: T, b: T) => number;
 
 export function keyToCmp<T>(keyFn: (v: T) => Primitive): CmpFn<T> {
   return (a: T, b: T) => {
-    let ka = keyFn(a);
-    let kb = keyFn(b);
+    const ka = keyFn(a);
+    const kb = keyFn(b);
     if (typeof ka === "boolean" && typeof kb === "boolean") {
       return ka === kb ? 0 : !ka && kb ? -1 : 1;
     } else if (typeof ka === "number" && typeof kb === "number") {
