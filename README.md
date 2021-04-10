@@ -3,9 +3,10 @@
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/itertools/mod.ts)
 [![Test](https://github.com/lambdalisue/itertools-deno/actions/workflows/test.yml/badge.svg)](https://github.com/lambdalisue/itertools-deno/actions/workflows/test.yml)
 
-A TypeScript port of Python's awesome [itertools][] standard library.
+A TypeScript port of Python's awesome [itertools][itertools] standard library.
 
-This is an standalone version of [nvie/itertools.js][] for using under the [Deno][] environment.
+This is an standalone version of [nvie/itertools.js][nvie/itertools.js] for
+using under the [Deno][Deno] environment.
 
 [Deno]: https://deno.land/
 [itertools]: https://docs.python.org/3/library/itertools.html
@@ -17,14 +18,18 @@ This is an standalone version of [nvie/itertools.js][] for using under the [Deno
 ```typescript
 import { enumerate } from "https://deno.land/x/itertools/mod.ts";
 
-console.log([...enumerate(['hello', 'world'])]);
+console.log([...enumerate(["hello", "world"])]);
 // [0, 'hello'], [1, 'world']
 ```
 
-This module provides more functions ported from Python's builtin functions, [itertools][], [more-itertools][], and more.
-In other words, all functions provided by the original [nvie/itertools.js][].
+This module provides more functions ported from Python's builtin functions,
+[itertools][itertools], [more-itertools][more-itertools], and more. In other
+words, all functions provided by the original
+[nvie/itertools.js][nvie/itertools.js].
 
-See [API documentation](https://doc.deno.land/https/deno.land/x/itertools/mod.ts) for more details.
+See
+[API documentation](https://doc.deno.land/https/deno.land/x/itertools/mod.ts)
+for more details.
 
 ## License
 
