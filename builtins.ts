@@ -1,9 +1,12 @@
-// @flow strict
-
-import { first } from './custom';
-import { count, ifilter, imap, izip, izip3, takewhile } from './itertools';
-import type { Maybe, Predicate, Primitive } from './types';
-import { identityPredicate, keyToCmp, numberIdentity, primitiveIdentity } from './utils';
+import { first } from "./custom.ts";
+import { count, ifilter, imap, izip, izip3, takewhile } from "./itertools.ts";
+import type { Maybe, Predicate, Primitive } from "./types.ts";
+import {
+  identityPredicate,
+  keyToCmp,
+  numberIdentity,
+  primitiveIdentity,
+} from "./utils.ts";
 
 /**
  * Returns true when all of the items in iterable are truthy.  An optional key
@@ -23,14 +26,16 @@ import { identityPredicate, keyToCmp, numberIdentity, primitiveIdentity } from '
  *     all([2, 4, 5], n => n % 2 === 0)  // => false
  *
  */
-export function all<T>(iterable: Iterable<T>, keyFn: Predicate<T> = identityPredicate): boolean {
-    for (let item of iterable) {
-        if (!keyFn(item)) {
-            return false;
-        }
+export function all<T>(
+  iterable: Iterable<T>,
+  keyFn: Predicate<T> = identityPredicate,
+): boolean {
+  for (const item of iterable) {
+    if (!keyFn(item)) {
+      return false;
     }
-
-    return true;
+  }
+  return true;
 }
 
 /**
@@ -50,14 +55,16 @@ export function all<T>(iterable: Iterable<T>, keyFn: Predicate<T> = identityPred
  *     any([{name: 'Bob'}, {name: 'Alice'}], person => person.name.startsWith('C'))  // => false
  *
  */
-export function any<T>(iterable: Iterable<T>, keyFn: Predicate<T> = identityPredicate): boolean {
-    for (let item of iterable) {
-        if (keyFn(item)) {
-            return true;
-        }
+export function any<T>(
+  iterable: Iterable<T>,
+  keyFn: Predicate<T> = identityPredicate,
+): boolean {
+  for (const item of iterable) {
+    if (keyFn(item)) {
+      return true;
     }
-
-    return false;
+  }
+  return false;
 }
 
 /**
@@ -72,7 +79,7 @@ export function any<T>(iterable: Iterable<T>, keyFn: Predicate<T> = identityPred
  *
  */
 export function contains<T>(haystack: Iterable<T>, needle: T): boolean {
-    return any(haystack, (x) => x === needle);
+  return any(haystack, (x) => x === needle);
 }
 
 /**
@@ -88,18 +95,24 @@ export function contains<T>(haystack: Iterable<T>, needle: T): boolean {
  *     console.log([...enumerate(['hello', 'world'])]);
  *     // [0, 'hello'], [1, 'world']]
  */
-export function* enumerate<T>(iterable: Iterable<T>, start: number = 0): Iterable<[number, T]> {
-    let index: number = start;
-    for (let value of iterable) {
-        yield [index++, value];
-    }
+export function* enumerate<T>(
+  iterable: Iterable<T>,
+  start: number = 0,
+): Iterable<[number, T]> {
+  let index: number = start;
+  for (const value of iterable) {
+    yield [index++, value];
+  }
 }
 
 /**
  * Non-lazy version of ifilter().
  */
-export function filter<T>(iterable: Iterable<T>, predicate: Predicate<T>): Array<T> {
-    return Array.from(ifilter(iterable, predicate));
+export function filter<T>(
+  iterable: Iterable<T>,
+  predicate: Predicate<T>,
+): Array<T> {
+  return Array.from(ifilter(iterable, predicate));
 }
 
 /**
@@ -108,18 +121,30 @@ export function filter<T>(iterable: Iterable<T>, predicate: Predicate<T>): Array
  * main use case of this function is to get a single iterator (a thing with
  * state, think of it as a "cursor") which can only be consumed once.
  */
-export function iter<T>(iterable: Iterable<T>): Iterator<T> {
-    // TODO: Not sure why Flow choked on this expression below, but at least we lock down the
-    // type transformation in the function signature this way.
-    // $FlowFixMe[incompatible-use]
-    return iterable[Symbol.iterator]();
+export function iter<T>(
+  iterable: Iterable<T> | IterableIterator<T>,
+): IterableIterator<T> {
+  const inner = iterable[Symbol.iterator]();
+  const it = {
+    next(): IteratorResult<T> {
+      return inner.next();
+    },
+
+    [Symbol.iterator]() {
+      return it;
+    },
+  };
+  return it;
 }
 
 /**
  * Non-lazy version of imap().
  */
-export function map<T, V>(iterable: Iterable<T>, mapper: (T) => V): Array<V> {
-    return Array.from(imap(iterable, mapper));
+export function map<T, V>(
+  iterable: Iterable<T>,
+  mapper: (v: T) => V,
+): Array<V> {
+  return Array.from(imap(iterable, mapper));
 }
 
 /**
@@ -133,8 +158,11 @@ export function map<T, V>(iterable: Iterable<T>, mapper: (T) => V): Array<V> {
  * If multiple items are maximal, the function returns either one of them, but
  * which one is not defined.
  */
-export function max<T>(iterable: Iterable<T>, keyFn: (T) => number = numberIdentity): Maybe<T> {
-    return reduce_(iterable, (x, y) => (keyFn(x) > keyFn(y) ? x : y));
+export function max<T>(
+  iterable: Iterable<T>,
+  keyFn: (v: T) => number = numberIdentity,
+): Maybe<T> {
+  return reduce_(iterable, (x, y) => (keyFn(x) > keyFn(y) ? x : y));
 }
 
 /**
@@ -148,17 +176,20 @@ export function max<T>(iterable: Iterable<T>, keyFn: (T) => number = numberIdent
  * If multiple items are minimal, the function returns either one of them, but
  * which one is not defined.
  */
-export function min<T>(iterable: Iterable<T>, keyFn: (T) => number = numberIdentity): Maybe<T> {
-    return reduce_(iterable, (x, y) => (keyFn(x) < keyFn(y) ? x : y));
+export function min<T>(
+  iterable: Iterable<T>,
+  keyFn: (v: T) => number = numberIdentity,
+): Maybe<T> {
+  return reduce_(iterable, (x, y) => (keyFn(x) < keyFn(y) ? x : y));
 }
 
 /**
  * Internal helper for the range function
  */
 function _range(start: number, stop: number, step: number): Iterable<number> {
-    const counter = count(start, step);
-    const pred = step >= 0 ? (n) => n < stop : (n) => n > stop;
-    return takewhile(counter, pred);
+  const counter = count(start, step);
+  const pred = step >= 0 ? (n: number) => n < stop : (n: number) => n > stop;
+  return takewhile(counter, pred);
 }
 
 /**
@@ -186,18 +217,18 @@ function _range(start: number, stop: number, step: number): Iterable<number> {
  * not meet the value constraint.
  */
 export function range(a: number, ...rest: Array<number>): Iterable<number> {
-    const args = [a, ...rest]; // "a" was only used by Flow to make at least one value mandatory
-    switch (args.length) {
-        case 1:
-            return _range(0, args[0], 1);
-        case 2:
-            return _range(args[0], args[1], 1);
-        case 3:
-            return _range(args[0], args[1], args[2]);
-        /* istanbul ignore next */
-        default:
-            throw new Error('invalid number of arguments');
-    }
+  const args = [a, ...rest]; // "a" was only used by Flow to make at least one value mandatory
+  switch (args.length) {
+    case 1:
+      return _range(0, args[0], 1);
+    case 2:
+      return _range(args[0], args[1], 1);
+    case 3:
+      return _range(args[0], args[1], args[2]);
+    /* istanbul ignore next */
+    default:
+      throw new Error("invalid number of arguments");
+  }
 }
 
 /**
@@ -221,26 +252,32 @@ export function range(a: number, ...rest: Array<number>): Iterable<number> {
  * `reduce_()`, and the given iterable is empty, then no default value can be
  * derived and `undefined` will be returned.
  */
-export function reduce<T, O>(iterable: Iterable<T>, reducer: (O, T, number) => O, start: O): O {
-    const it = iter(iterable);
-    let output = start;
-    for (const [index, item] of enumerate(it)) {
-        output = reducer(output, item, index);
-    }
-    return output;
+export function reduce<T, O>(
+  iterable: Iterable<T>,
+  reducer: (a: O, v: T, i: number) => O,
+  start: O,
+): O {
+  let output = start;
+  for (const [index, item] of enumerate(iterable)) {
+    output = reducer(output, item, index);
+  }
+  return output;
 }
 
 /**
  * See reduce().
  */
-export function reduce_<T>(iterable: Iterable<T>, reducer: (T, T, number) => T): Maybe<T> {
-    const it = iter(iterable);
-    const start = first(it);
-    if (start === undefined) {
-        return undefined;
-    } else {
-        return reduce(it, reducer, start);
-    }
+export function reduce_<T>(
+  iterable: Iterable<T>,
+  reducer: (a: T, v: T, i: number) => T,
+): Maybe<T> {
+  const it = iter(iterable);
+  const start = first(it);
+  if (start === undefined) {
+    return undefined;
+  } else {
+    return reduce(it, reducer, start);
+  }
 }
 
 /**
@@ -257,18 +294,18 @@ export function reduce_<T>(iterable: Iterable<T>, reducer: (T, T, number) => T):
  *   sorted as if each comparison were reversed.
  */
 export function sorted<T>(
-    iterable: Iterable<T>,
-    keyFn: (T) => Primitive = primitiveIdentity,
-    reverse: boolean = false
+  iterable: Iterable<T>,
+  keyFn: (v: T) => Primitive = primitiveIdentity,
+  reverse: boolean = false,
 ): Array<T> {
-    const result = Array.from(iterable);
-    result.sort(keyToCmp(keyFn)); // sort in-place
+  const result = Array.from(iterable);
+  result.sort(keyToCmp(keyFn)); // sort in-place
 
-    if (reverse) {
-        result.reverse(); // reverse in-place
-    }
+  if (reverse) {
+    result.reverse(); // reverse in-place
+  }
 
-    return result;
+  return result;
 }
 
 /**
@@ -276,19 +313,26 @@ export function sorted<T>(
  * sum will defaults to 0 if the iterable is empty.
  */
 export function sum(iterable: Iterable<number>): number {
-    return reduce(iterable, (x, y) => x + y, 0);
+  return reduce(iterable, (x, y) => x + y, 0);
 }
 
 /**
  * See izip.
  */
-export function zip<T1, T2>(xs: Iterable<T1>, ys: Iterable<T2>): Array<[T1, T2]> {
-    return Array.from(izip(xs, ys));
+export function zip<T1, T2>(
+  xs: Iterable<T1>,
+  ys: Iterable<T2>,
+): Array<[T1, T2]> {
+  return Array.from(izip(xs, ys));
 }
 
 /**
  * See izip3.
  */
-export function zip3<T1, T2, T3>(xs: Iterable<T1>, ys: Iterable<T2>, zs: Iterable<T3>): Array<[T1, T2, T3]> {
-    return Array.from(izip3(xs, ys, zs));
+export function zip3<T1, T2, T3>(
+  xs: Iterable<T1>,
+  ys: Iterable<T2>,
+  zs: Iterable<T3>,
+): Array<[T1, T2, T3]> {
+  return Array.from(izip3(xs, ys, zs));
 }

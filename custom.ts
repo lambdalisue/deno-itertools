@@ -1,11 +1,9 @@
-// @flow strict
-
-import { imap } from './itertools';
-import { flatten } from './more-itertools';
-import type { Maybe, Predicate } from './types';
+import { imap } from "./itertools.ts";
+import { flatten } from "./more-itertools.ts";
+import type { Maybe, NullableKeys, Predicate } from "./types.ts";
 
 function isDefined<T>(x: T): boolean {
-    return x !== undefined;
+  return x !== undefined;
 }
 
 /**
@@ -16,19 +14,19 @@ function isDefined<T>(x: T): boolean {
  *     >>> compact([1, 2, undefined, 3])
  *     [1, 2, 3]
  */
-export function* icompact<T>(iterable: Iterable<T>): Iterable<$NonMaybeType<T>> {
-    for (let item of iterable) {
-        if (typeof item !== 'undefined') {
-            yield item;
-        }
+export function* icompact<T>(iterable: Iterable<Maybe<T>>): Iterable<T> {
+  for (let item of iterable) {
+    if (typeof item !== "undefined") {
+      yield item;
     }
+  }
 }
 
 /**
  * See icompact().
  */
-export function compact<T>(iterable: Iterable<T>): Array<$NonMaybeType<T>> {
-    return Array.from(icompact(iterable));
+export function compact<T>(iterable: Iterable<Maybe<T>>): Array<T> {
+  return Array.from(icompact(iterable));
 }
 
 /**
@@ -38,14 +36,16 @@ export function compact<T>(iterable: Iterable<T>): Array<$NonMaybeType<T>> {
  *     { a: 1, c: 0 }
  *
  */
-export function compactObject<O: { +[key: string]: mixed }>(obj: O): $ObjMap<O, <T>(T) => $NonMaybeType<T>> {
-    let result = {};
-    for (const [key, value] of Object.entries(obj)) {
-        if (typeof value !== 'undefined') {
-            result[key] = value;
-        }
+export function compactObject<O extends object>(
+  obj: O,
+): Omit<O, NullableKeys<O>> {
+  let result: any = {};
+  for (const [key, value] of Object.entries(obj)) {
+    if (typeof value !== "undefined") {
+      result[key] = value;
     }
-    return result;
+  }
+  return result;
 }
 
 /**
@@ -53,14 +53,17 @@ export function compactObject<O: { +[key: string]: mixed }>(obj: O): $ObjMap<O, 
  * any.  If no such item exists, `undefined` is returned.  The default
  * predicate is any defined value.
  */
-export function first<T>(iterable: Iterable<T>, keyFn?: Predicate<T>): Maybe<T> {
-    const fn = keyFn || isDefined;
-    for (let value of iterable) {
-        if (fn(value)) {
-            return value;
-        }
+export function first<T>(
+  iterable: Iterable<T>,
+  keyFn?: Predicate<T>,
+): Maybe<T> {
+  const fn = keyFn || isDefined;
+  for (let value of iterable) {
+    if (fn(value)) {
+      return value;
     }
-    return undefined;
+  }
+  return undefined;
 }
 
 /**
@@ -77,6 +80,9 @@ export function first<T>(iterable: Iterable<T>, keyFn?: Predicate<T>): Maybe<T> 
  *     [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]  // note: no 0
  *
  */
-export function flatmap<T, S>(iterable: Iterable<T>, mapper: (T) => Iterable<S>): Iterable<S> {
-    return flatten(imap(iterable, mapper));
+export function flatmap<T, S>(
+  iterable: Iterable<T>,
+  mapper: (v: T) => Iterable<S>,
+): Iterable<S> {
+  return flatten(imap(iterable, mapper));
 }
