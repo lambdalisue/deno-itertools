@@ -2,14 +2,14 @@
 
 [![deno land](http://img.shields.io/badge/available%20on-deno.land/x-lightgrey.svg?logo=deno)](https://deno.land/x/itertools)
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/itertools/mod.ts)
-[![Test](https://github.com/lambdalisue/itertools-deno/actions/workflows/test.yml/badge.svg)](https://github.com/lambdalisue/itertools-deno/actions/workflows/test.yml)
+[![Test](https://github.com/lambdalisue/deno-itertools/actions/workflows/test.yml/badge.svg)](https://github.com/lambdalisue/deno-itertools/actions/workflows/test.yml)
 
 A TypeScript port of Python's awesome [itertools][itertools] standard library.
 
 This is an standalone version of [nvie/itertools.js][nvie/itertools.js] for
-using under the [Deno][Deno] environment.
+using under the [Deno][deno] environment.
 
-[Deno]: https://deno.land/
+[deno]: https://deno.land/
 [itertools]: https://docs.python.org/3/library/itertools.html
 [more-itertools]: https://pypi.org/project/more-itertools/
 [nvie/itertools.js]: https://github.com/nvie/itertools.js
