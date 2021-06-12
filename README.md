@@ -1,5 +1,6 @@
 # itertools
 
+[![deno land](http://img.shields.io/badge/available%20on-deno.land/x-lightgrey.svg?logo=deno)](https://deno.land/x/itertools)
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/itertools/mod.ts)
 [![Test](https://github.com/lambdalisue/itertools-deno/actions/workflows/test.yml/badge.svg)](https://github.com/lambdalisue/itertools-deno/actions/workflows/test.yml)
 
