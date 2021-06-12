@@ -436,7 +436,7 @@ export function* repeat<T>(thing: T, times?: number): Iterable<T> {
     }
   } else {
     // eslint-disable-next-line no-unused-vars
-    for (const i of range(times)) {
+    for (const _ of range(times)) {
       yield thing;
     }
   }
