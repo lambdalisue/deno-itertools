@@ -1,4 +1,4 @@
-import { describe, expect, it } from "./deps_test.ts";
+import { assertThrows, describe, expect, it } from "./deps_test.ts";
 import {
   all,
   any,
@@ -253,6 +253,16 @@ describe("range", () => {
     expect(Array.from(range(3, 10, 3))).toEqual([3, 6, 9]);
     expect(Array.from(range(5, 1, -1))).toEqual([5, 4, 3, 2]);
     expect(Array.from(range(5, -3, -2))).toEqual([5, 3, 1, -1]);
+  });
+
+  it("step cannot be 0", () => {
+    assertThrows(
+      () => {
+        range(0, 1, 0);
+      },
+      undefined,
+      "range() arg 3 must not be zero",
+    );
   });
 });
 

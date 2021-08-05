@@ -187,8 +187,11 @@ export function min<T>(
  * Internal helper for the range function
  */
 function _range(start: number, stop: number, step: number): Iterable<number> {
+  if (step === 0) {
+    throw new Error("range() arg 3 must not be zero");
+  }
   const counter = count(start, step);
-  const pred = step >= 0 ? (n: number) => n < stop : (n: number) => n > stop;
+  const pred = step > 0 ? (n: number) => n < stop : (n: number) => n > stop;
   return takewhile(counter, pred);
 }
 
