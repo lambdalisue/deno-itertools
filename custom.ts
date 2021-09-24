@@ -34,7 +34,6 @@ export function compact<T>(iterable: Iterable<Maybe<T>>): Array<T> {
  *
  *     >>> compactObject({ a: 1, b: undefined, c: 0 })
  *     { a: 1, c: 0 }
- *
  */
 export function compactObject<O extends Record<string, unknown>>(
   obj: O,
@@ -79,7 +78,6 @@ export function first<T>(
  *     >>> const repeatN = n => repeat(n, n);
  *     >>> [...flatmap([0, 1, 2, 3, 4], repeatN)]
  *     [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]  // note: no 0
- *
  */
 export function flatmap<T, S>(
   iterable: Iterable<T>,
