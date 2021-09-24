@@ -47,7 +47,6 @@ export function* chunked<T>(
  *
  *     [...flatten([[0, 1], [2, 3]])]
  *     // [0, 1, 2, 3]
- *
  */
 export function* flatten<T>(
   iterableOfIterables: Iterable<Iterable<T>>,
@@ -64,7 +63,6 @@ export function* flatten<T>(
  *
  *     >>> [...intersperse(-1, range(1, 5))]
  *     [1, -1, 2, -1, 3, -1, 4]
- *
  */
 export function intersperse<T, Y>(
   value: T,
@@ -100,7 +98,6 @@ export function* itake<T>(n: number, iterable: Iterable<T>): Iterable<T> {
  *
  *     >>> pairwise([8, 2, 0, 7])
  *     [(8, 2), (2, 0), (0, 7)]
- *
  */
 export function* pairwise<T>(iterable: Iterable<T>): Iterable<[T, T]> {
   const it = iter(iterable);
@@ -128,7 +125,6 @@ export function* pairwise<T>(iterable: Iterable<T>): Iterable<[T, T]> {
  *     [1, 3, 5, 7, 9]
  *     >>> evens
  *     [0, 2, 4, 6, 8]
- *
  */
 export function partition<T>(
   iterable: Iterable<T>,
@@ -236,7 +232,6 @@ export function take<T>(n: number, iterable: Iterable<T>): Array<T> {
  *     ['A', 'B', 'C', 'D']
  *     >>> [...uniqueEverseen('AbBCcAB', s => s.toLowerCase())]
  *     ['A', 'b', 'C']
- *
  */
 export function* uniqueEverseen<T>(
   iterable: Iterable<T>,
@@ -259,7 +254,6 @@ export function* uniqueEverseen<T>(
  *     ['A', 'B', 'C', 'D', 'A', 'B']
  *     >>> [...uniqueJustseen('AbBCcAB', s => s.toLowerCase())]
  *     ['A', 'b', 'C', 'A', 'B']
- *
  */
 export function* uniqueJustseen<T>(
   iterable: Iterable<T>,

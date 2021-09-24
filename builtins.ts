@@ -24,7 +24,6 @@ import {
  *
  *     all([2, 4, 6], n => n % 2 === 0)  // => true
  *     all([2, 4, 5], n => n % 2 === 0)  // => false
- *
  */
 export function all<T>(
   iterable: Iterable<T>,
@@ -53,7 +52,6 @@ export function all<T>(
  *
  *     any([1, 4, 5], n => n % 2 === 0)  // => true
  *     any([{name: 'Bob'}, {name: 'Alice'}], person => person.name.startsWith('C'))  // => false
- *
  */
 export function any<T>(
   iterable: Iterable<T>,
@@ -76,7 +74,6 @@ export function any<T>(
  *     contains([3], 42)                // => false
  *     contains([3], 3)                 // => true
  *     contains([0, 1, 2], 2)           // => true
- *
  */
 export function contains<T>(haystack: Iterable<T>, needle: T): boolean {
   return any(haystack, (x) => x === needle);
