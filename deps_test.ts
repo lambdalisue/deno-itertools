@@ -1,5 +1,5 @@
 export { expect } from "https://deno.land/x/expect@v0.2.9/mod.ts";
-export * from "https://deno.land/std@0.108.0/testing/asserts.ts";
+export * from "https://deno.land/std@0.109.0/testing/asserts.ts";
 
 const currentScopes: string[] = [];
 
