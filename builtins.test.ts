@@ -260,7 +260,7 @@ describe("range", () => {
       () => {
         range(0, 1, 0);
       },
-      undefined,
+      Error,
       "range() arg 3 must not be zero",
     );
   });
