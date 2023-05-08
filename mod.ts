@@ -1,5 +1,3 @@
-import type { Predicate, Primitive } from "./types.ts";
-
 export {
   all,
   any,
@@ -51,4 +49,4 @@ export {
 } from "./more-itertools.ts";
 export { compact, compactObject, first, flatmap, icompact } from "./custom.ts";
 
-export type { Predicate, Primitive };
+export type { Predicate, Primitive } from "./types.ts";
