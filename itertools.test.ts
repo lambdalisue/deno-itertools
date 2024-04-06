@@ -1,5 +1,5 @@
-import { describe, it } from "https://deno.land/std@0.186.0/testing/bdd.ts";
-import { expect } from "https://deno.land/x/expect@v0.3.0/mod.ts";
+import { describe, it } from "@std/testing/bdd";
+import { expect } from "@std/expect";
 import { all, iter, range } from "./builtins.ts";
 import {
   chain,

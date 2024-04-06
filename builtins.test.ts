@@ -1,6 +1,6 @@
-import { assertThrows } from "https://deno.land/std@0.186.0/testing/asserts.ts";
-import { describe, it } from "https://deno.land/std@0.186.0/testing/bdd.ts";
-import { expect } from "https://deno.land/x/expect@v0.3.0/mod.ts";
+import { assertThrows } from "@std/assert";
+import { describe, it } from "@std/testing/bdd";
+import { expect } from "@std/expect";
 import {
   all,
   any,
