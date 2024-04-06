@@ -10,12 +10,13 @@ on:
     branches:
       - main
   pull_request:
+  workflow_dispatch:
 
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: denoland/setup-deno@v1
         with:
           deno-version: ${{ env.DENO_VERSION }}
@@ -30,7 +31,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: denoland/setup-deno@v1
         with:
           deno-version: ${{ env.DENO_VERSION }}
@@ -38,3 +39,6 @@ jobs:
         run: |
           deno task test
         timeout-minutes: 5
+      - name: JSR publish (dry-run)
+        run: |
+          deno publish --dry-run
